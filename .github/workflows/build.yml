@@ -15,11 +15,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install Dependencies
-        run: |
-          cd apps/client && npm install
-          cd ../server && npm install
-      - name: Build
-        run: |
-          cd apps/client && npm run build
-          cd ../server && npm run build
+          cache: 'npm'
+      
+      - name: Install Dependencies (Shared)
+        working-directory: packages/shared-types
+        run: npm install
+      
+      - name: Install Dependencies (Client)
+        working-directory: apps/client
+        run: npm install
+      
+      - name: Install Dependencies (Server)
+        working-directory: apps/server
+        run: npm install
+      
+      - name: Build Shared Types
+        working-directory: packages/shared-types
+        run: npm run build
+      
+      - name: Build Client
+        working-directory: apps/client
+        run: npm run build
+      
+      - name: Build Server
+        working-directory: apps/server
+        run: npm run build
