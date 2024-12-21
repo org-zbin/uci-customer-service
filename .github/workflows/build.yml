@@ -11,23 +11,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node.js
+      - name: Setup Node.js (Shared)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: packages/shared-types/package-lock.json
+      
+      - name: Setup Node.js (Client)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/client/package-lock.json
+      
+      - name: Setup Node.js (Server)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/server/package-lock.json
       
       - name: Install Dependencies (Shared)
         working-directory: packages/shared-types
-        run: npm install
+        run: npm ci
       
       - name: Install Dependencies (Client)
         working-directory: apps/client
-        run: npm install
+        run: npm ci
       
       - name: Install Dependencies (Server)
         working-directory: apps/server
-        run: npm install
+        run: npm ci
       
       - name: Build Shared Types
         working-directory: packages/shared-types
